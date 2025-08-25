@@ -17,6 +17,14 @@ try:
 except Exception as e:
    print(f"Not able to load the models: {e}")
 
+try:
+   with open("data/basetemplate.csv", "rb") as f:
+      basetemplate = f.read()
+   with open("data/template.csv", "rb") as f:
+      template = f.read()
+except Exception as e:
+   print(f"Data Templates not loaded correcctly: {e}")
+
 st.title(body="Prediction Tool")
 st.text("Upload a valid CSV file for batch prediction")
 
@@ -33,18 +41,32 @@ elif(selection == "XGboost"):
 elif(selection == "Bagging Regressor"):
    model = bagging
 
+st.download_button(
+       label="Download Template for Base Model",
+       data=basetemplate,
+       file_name="basetemplate.csv",
+       mime="text/csv")
+st.download_button(
+       label="Download Template for Other Models",
+       data=template,
+       file_name="template.csv",
+       mime="text/csv")
+
 csvfile = st.file_uploader("Upload CSV", type="csv", accept_multiple_files=False)
 
 if csvfile is not None:
    try:
-       data = pd.DataFrame(csvfile)
-       y_pred = model.predict(data)
+       data = pd.read_csv(csvfile)
    except Exception as e:
       st.error(f"Error while uploading file: {e}")
-   result = y_pred.to_csv(index = False).encode('utf-8')
+
+   y_pred = model.predict(data)
+   db_y_pred = pd.DataFrame(y_pred, columns=["predictions"])
+   result = db_y_pred.to_csv(index = False).encode('utf-8')
+   
    st.download_button(
-       label="results",
+       label="Download Result",
        data=result,
-       file_name="result",
+       file_name="result.csv",
        mime="text/csv"
     )
