@@ -1,5 +1,8 @@
 import streamlit as st 
-import pandas as pd
-import numpy as np
 
 st.title(body="Feature Documentation")
+
+with open("data\data_description.txt", "r", encoding="utf-8") as f:
+    data  = f.read()
+
+st.text(data)
