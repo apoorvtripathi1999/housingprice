@@ -1,11 +1,11 @@
 import streamlit as st 
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import plotly.express as px
 import cloudpickle
-import mlflow
 from mlflow.tracking import MlflowClient
+from transformers import pipeline
+import time
+
 
 try:
     with open("models/baggingmodel.cloudpickle", "rb") as f:
@@ -99,6 +99,20 @@ st.table(db_params)
 
 
 
+st.header("Model Comparison Analysis Using LLM")
+with st.spinner("Loading Analysis"):
+    time.sleep(50)
 
+    pipe = pipeline(
+   "text-generation",
+    model="gpt2",
+    )
+    message = f"These are the three metrics of 5 models trained for predicting the housing price: R2 Score: {str(dict_r2)}, Cross Validation Score: {str(dict_crossval)}, Root Mean Squared Error: {str(dict_rmse)} and tthe hyper parametrs passed are: {str(dict_params)} write a short 250 words summary of the model performance using the data given."
 
-
+    output = pipe(
+    message,
+    num_return_sequences=1,
+    )
+    output = str(output[0]["generated_text"])
+    st.text(output)
+st.success("Summary Loaded Successfully!")
