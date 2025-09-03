@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 import cloudpickle
 from mlflow.tracking import MlflowClient
-from transformers import pipeline
 import time
 
 
@@ -18,7 +17,7 @@ try:
        linear = cloudpickle.load(f)
     with open("models/basemodel.cloudpickle", "rb") as f:
        base = cloudpickle.load(f)
-    print("Loaded all models")
+    print("Model Loaded Successfully!")
 except Exception as e:
    print(f"Not able to load the models: {e}")
 
@@ -96,23 +95,3 @@ st.text("Model Parameters Comparison")
 db_params = pd.DataFrame(dict_params)
 db_params = db_params.fillna("-")
 st.table(db_params)
-
-
-
-st.header("Model Comparison Analysis Using LLM")
-with st.spinner("Loading Analysis"):
-    time.sleep(50)
-
-    pipe = pipeline(
-   "text-generation",
-    model="gpt2",
-    )
-    message = f"These are the three metrics of 5 models trained for predicting the housing price: R2 Score: {str(dict_r2)}, Cross Validation Score: {str(dict_crossval)}, Root Mean Squared Error: {str(dict_rmse)} and tthe hyper parametrs passed are: {str(dict_params)} write a short 250 words summary of the model performance using the data given."
-
-    output = pipe(
-    message,
-    num_return_sequences=1,
-    )
-    output = str(output[0]["generated_text"])
-    st.text(output)
-st.success("Summary Loaded Successfully!")
