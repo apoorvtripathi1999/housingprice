@@ -18,9 +18,9 @@ except Exception as e:
    print(f"Not able to load the models: {e}")
 
 try:
-   with open("data/basetemplate.csv", "rb") as f:
+   with open("basetemplates/basetemplate.csv", "rb") as f:
       basetemplate = f.read()
-   with open("data/template.csv", "rb") as f:
+   with open("basetemplates/template.csv", "rb") as f:
       template = f.read()
 except Exception as e:
    print(f"Data Templates not loaded correcctly: {e}")
