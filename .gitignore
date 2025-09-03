@@ -1,5 +1,4 @@
 *.csv
-*.txt
 *.venv
 *mlruns
 *mlartifacts

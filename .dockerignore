@@ -1,0 +1,30 @@
+Git version control
+.git
+.gitignore
+
+Docker specific files
+Dockerfile
+.dockerignore
+
+Virtual environments
+.venv
+venv
+env
+
+Python cache files
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+IDE and OS-specific files
+.idea/
+.vscode/
+*.DS_Store
+.env
+
+Local data, models, or notebooks
+/data/
+/models/
+*.csv
+*.ipynb
