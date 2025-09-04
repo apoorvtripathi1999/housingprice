@@ -1,21 +1,19 @@
 import streamlit as st 
 import pandas as pd
-import numpy as np
 import cloudpickle
 
-try:
-    with open("models/baggingmodel.cloudpickle", "rb") as f:
-       bagging = cloudpickle.load(f)
-    with open("models/boostingmodel.cloudpickle", "rb") as f:
-       boosting = cloudpickle.load(f)
-    with open("models/votingmodel.cloudpickle", "rb") as f:
-       voting = cloudpickle.load(f)
-    with open("models/lrmodel.cloudpickle", "rb") as f:
-       linear = cloudpickle.load(f)
-    with open("models/basemodel.cloudpickle", "rb") as f:
-       base = cloudpickle.load(f)
-except Exception as e:
-   print(f"Not able to load the models: {e}")
+
+with open("models/baggingmodel.cloudpickle", "rb") as f:
+   bagging = cloudpickle.load(f)
+with open("models/boostingmodel.cloudpickle", "rb") as f:
+   boosting = cloudpickle.load(f)
+with open("models/votingmodel.cloudpickle", "rb") as f:
+   voting = cloudpickle.load(f)
+with open("models/lrmodel.cloudpickle", "rb") as f:
+   linear = cloudpickle.load(f)
+with open("models/basemodel.cloudpickle", "rb") as f:
+   base = cloudpickle.load(f)
+print("Models Loaded Successfully")
 
 try:
    with open("basetemplates/basetemplate.csv", "rb") as f:
@@ -53,6 +51,8 @@ st.download_button(
        mime="text/csv")
 
 csvfile = st.file_uploader("Upload CSV", type="csv", accept_multiple_files=False)
+
+y_pred = None
 
 if csvfile is not None:
    try:

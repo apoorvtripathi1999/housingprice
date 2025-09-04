@@ -2,41 +2,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import cloudpickle
-from mlflow.tracking import MlflowClient
-import time
-
-
-try:
-    with open("models/baggingmodel.cloudpickle", "rb") as f:
-       bagging = cloudpickle.load(f)
-    with open("models/boostingmodel.cloudpickle", "rb") as f:
-       boosting = cloudpickle.load(f)
-    with open("models/votingmodel.cloudpickle", "rb") as f:
-       voting = cloudpickle.load(f)
-    with open("models/lrmodel.cloudpickle", "rb") as f:
-       linear = cloudpickle.load(f)
-    with open("models/basemodel.cloudpickle", "rb") as f:
-       base = cloudpickle.load(f)
-    print("Model Loaded Successfully!")
-except Exception as e:
-   print(f"Not able to load the models: {e}")
-
-client = MlflowClient()
-
-experiments = client.search_experiments()
-
-exp_ids = [exp.experiment_id for exp in experiments]
-exp_ids = exp_ids[:-1]
-
-try: 
-    runs = client.search_runs(experiment_ids=exp_ids,max_results=100, order_by=["attributes.start_time DESC"])
-    print("Successfully loaded runs data")
-except Exception as e:
-   print(f"Not able to get the runs data: {e}")
 
 run_dict = {}
-for run in runs[0:5]:
-   run_dict[run.info.experiment_id] = {"metrics": run.data.metrics, "params": run.data.params}
+
+with open("models/run_dict.cloudpickle", "rb")as f:
+    run_dict = cloudpickle.load(f)
 
 dict_r2 = {}
 dict_rmse = {}
